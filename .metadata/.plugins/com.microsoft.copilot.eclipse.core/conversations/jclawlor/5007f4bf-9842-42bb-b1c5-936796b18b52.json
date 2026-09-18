@@ -1,0 +1,100 @@
+{
+  "conversationId": "5007f4bf-9842-42bb-b1c5-936796b18b52",
+  "title": "What will findByUserUsernameAndDate return if ther...",
+  "requesterUsername": "jclawlor",
+  "responderUsername": "GitHub Copilot",
+  "turns": [
+    {
+      "message": {
+        "text": "What will findByUserUsernameAndDate return if there is no daily log that matches?"
+      },
+      "currentDocument": {
+        "uri": "/backend/src/main/java/dev/jclawlor/FitnessGoals/repository/DailyLogRepository.java"
+      },
+      "references": [],
+      "ignoredSkills": [],
+      "userLanguage": "en",
+      "source": "panel",
+      "model": "Auto",
+      "chatMode": "Ask",
+      "needToolCallConfirmation": true,
+      "turnId": "08f877a6-40bf-4e4d-a6cb-6918fd20895e",
+      "role": "user",
+      "timestamp": "2026-08-01T18:47:46.611652500Z"
+    },
+    {
+      "reply": {
+        "annotations": [],
+        "references": [],
+        "hideText": false,
+        "notifications": [],
+        "followups": [],
+        "errorMessages": [
+          {
+            "error": {
+              "message": "No model configuration found",
+              "code": -1
+            }
+          }
+        ],
+        "editAgentRounds": [],
+        "panelMessages": [],
+        "steps": [],
+        "agentMessages": [],
+        "data": {},
+        "modelName": "auto",
+        "billingMultiplier": 0.0
+      },
+      "turnId": "08f877a6-40bf-4e4d-a6cb-6918fd20895e",
+      "role": "copilot",
+      "timestamp": "2026-08-01T18:47:47.107395400Z"
+    },
+    {
+      "message": {
+        "text": "Test"
+      },
+      "currentDocument": {
+        "uri": "/backend/src/main/java/dev/jclawlor/FitnessGoals/service/impl/DailyLogServiceImpl.java"
+      },
+      "references": [],
+      "ignoredSkills": [],
+      "userLanguage": "en",
+      "source": "panel",
+      "model": "Auto",
+      "chatMode": "Ask",
+      "needToolCallConfirmation": true,
+      "turnId": "05f46ad1-ae9e-415a-b355-9f040ae82849",
+      "role": "user",
+      "timestamp": "2026-08-01T18:51:20.303804200Z"
+    },
+    {
+      "reply": {
+        "annotations": [],
+        "references": [],
+        "hideText": false,
+        "notifications": [],
+        "followups": [],
+        "errorMessages": [
+          {
+            "error": {
+              "message": "No model configuration found",
+              "code": -1
+            }
+          }
+        ],
+        "editAgentRounds": [],
+        "panelMessages": [],
+        "steps": [],
+        "agentMessages": [],
+        "data": {},
+        "modelName": "auto",
+        "billingMultiplier": 0.0
+      },
+      "turnId": "05f46ad1-ae9e-415a-b355-9f040ae82849",
+      "role": "copilot",
+      "timestamp": "2026-08-01T18:51:20.380682300Z"
+    }
+  ],
+  "creationDate": "2026-08-01T18:47:46.595066300Z",
+  "lastMessageDate": "2026-08-01T18:51:20.777429Z"
+}

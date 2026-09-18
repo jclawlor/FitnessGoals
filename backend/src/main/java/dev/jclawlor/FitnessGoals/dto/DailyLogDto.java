@@ -1,0 +1,100 @@
+package dev.jclawlor.FitnessGoals.dto;
+
+import java.time.LocalDate;
+import java.util.List;
+
+import dev.jclawlor.FitnessGoals.entity.CardioExercise;
+import dev.jclawlor.FitnessGoals.entity.LiftingExercise;
+import dev.jclawlor.FitnessGoals.entity.Meal;
+
+
+public class DailyLogDto {
+	
+	
+    private Long id;
+
+    private String username;
+
+    private LocalDate date;
+
+    private List<Meal> meals;
+
+    private List<LiftingExercise> liftingExercises;
+
+    private List<CardioExercise> cardioExercises;
+    
+    private double waterOunces;
+
+    
+    public DailyLogDto() {
+    	// Default constructor
+	}
+    
+    public DailyLogDto(String username, LocalDate date, List<Meal> meals, List<LiftingExercise> liftingExercises, List<CardioExercise> cardioExercises) {
+    	this.username = username;
+    	this.date = date;
+    	this.meals = meals;
+    	this.liftingExercises = liftingExercises;
+    	this.cardioExercises = cardioExercises;
+    	this.waterOunces = 0.0; 
+    	
+    }
+    
+	public Long getId() {
+		return id;
+	}    
+	
+	
+	public void setId(Long id) {
+		this.id = id;
+	}
+	
+	public String getUsername() {
+		return username;
+	}
+	
+	public void setUsername(String username) {
+		this.username = username;
+	}
+	
+	public LocalDate getDate() {
+		return date;
+	}
+	
+	public void setDate(LocalDate date) {
+		this.date = date;
+	}
+	
+	public List<Meal> getMeals() {
+		return meals;
+	}
+	
+	public void setMeals(List<Meal> meals) {
+		this.meals = meals;
+	}
+	
+	public List<LiftingExercise> getLiftingExercises() {
+		return liftingExercises;
+	}
+	
+	public void setLiftingExercises(List<LiftingExercise> liftingExercises) {
+		this.liftingExercises = liftingExercises;
+	}
+	
+	public List<CardioExercise> getCardioExercises() {
+		return cardioExercises;
+	}
+	
+	public void setCardioExercises(List<CardioExercise> cardioExercises) {
+		this.cardioExercises = cardioExercises;
+	}
+	
+	public double getWaterOunces() {
+		return waterOunces;
+	}
+	
+	public void setWaterOunces(double waterOunces) {
+		this.waterOunces = waterOunces;
+	}
+    
+}

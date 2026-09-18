@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename local variable &apos;dailyLog&apos; in &apos;dev.jclawlor.FitnessGoals.mapper.DailyLogMapper.mapToDailyLog(...)&apos; to &apos;dailyLogDto&apos;&#x0D;&#x0A;- Original project: &apos;backend&apos;&#x0D;&#x0A;- Original element: &apos;dev.jclawlor.FitnessGoals.mapper.DailyLogMapper.mapToDailyLog(DailyLogDto).dailyLog&apos;&#x0D;&#x0A;- Renamed element: &apos;dailyLog&apos;&#x0D;&#x0A;- Update references to refactored element" description="Rename local variable &apos;dailyLog&apos;" id="org.eclipse.jdt.ui.rename.local.variable" input="/src\/main\/java=/optional=/true=/=/maven.pomderived=/true=/&lt;dev.jclawlor.FitnessGoals.mapper{DailyLogMapper.java[DailyLogMapper~mapToDailyLog~QDailyLogDto;@dailyLog!214!239!232!239!QDailyLogDto;!16!true" name="dailyLogDto" references="true" stamp="1780249457776" version="1.0"/>
+</session>

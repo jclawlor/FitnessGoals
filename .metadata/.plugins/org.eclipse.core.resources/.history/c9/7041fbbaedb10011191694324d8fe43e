@@ -1,0 +1,65 @@
+package dev.jclawlor.FitnessGoals.mapper;
+
+import org.springframework.stereotype.Component;
+
+import dev.jclawlor.FitnessGoals.dto.CardioExerciseDto;
+import dev.jclawlor.FitnessGoals.dto.PaceDto;
+import dev.jclawlor.FitnessGoals.entity.CardioExercise;
+import dev.jclawlor.FitnessGoals.entity.Pace;
+
+
+@Component
+public class CardioExerciseMapper {
+	
+	/**
+	 * Converts a CardioExerciseDto to a CardioExercise entity.
+	 * 
+	 * 
+	 * @param cardioExerciseDto
+	 * @return
+	 */
+	public CardioExercise mapToCardioExercise(final CardioExerciseDto cardioExerciseDto) {
+		CardioExercise cardioExercise = new CardioExercise();
+		cardioExercise.setId(cardioExerciseDto.getId());
+		cardioExercise.setName(cardioExerciseDto.getName());
+		cardioExercise.setDurationMinutes(cardioExerciseDto.getDurationMinutes());
+		cardioExercise.setCaloriesBurned(cardioExerciseDto.getCaloriesBurned());
+		
+		
+		if (cardioExerciseDto.getPace() != null) {
+			cardioExercise.setPace(new Pace( cardioExerciseDto.getPace().getMinutes(), cardioExerciseDto.getPace().getUnit()));
+		}
+		
+		
+		return cardioExercise;
+		
+	}
+	
+	
+	
+	/**
+	 * Converts a CardioExercise entity to a CardioExerciseDto.
+	 * 
+	 * 
+	 * @param cardioExercise
+	 * @return
+	 */
+	public CardioExerciseDto mapToCardioExerciseDto (final CardioExercise cardioExercise) {
+		CardioExerciseDto cardioExerciseDto = new CardioExerciseDto();
+		cardioExerciseDto.setId(cardioExercise.getId());
+		cardioExerciseDto.setName(cardioExercise.getName());
+		cardioExerciseDto.setDurationMinutes(cardioExercise.getDurationMinutes());
+		cardioExerciseDto.setCaloriesBurned(cardioExercise.getCaloriesBurned());
+
+
+		if (cardioExercise.getPace() != null) {
+			cardioExerciseDto.setPace(new PaceDto(
+				cardioExercise.getPace().getMinutes(),
+				cardioExercise.getPace().getUnit()
+			));
+		}
+		
+		return cardioExerciseDto;
+	}
+
+}

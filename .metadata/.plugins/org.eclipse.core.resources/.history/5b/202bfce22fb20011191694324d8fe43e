@@ -1,0 +1,188 @@
+package dev.jclawlor.FitnessGoals.controller;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.web.servlet.MockMvc;
+
+import dev.jclawlor.FitnessGoals.TestUtils;
+import dev.jclawlor.FitnessGoals.dto.CardioExerciseDto;
+import dev.jclawlor.FitnessGoals.dto.PaceDto;
+import dev.jclawlor.FitnessGoals.enums.PaceUnit;
+import dev.jclawlor.FitnessGoals.repository.CardioExerciseRepository;
+import dev.jclawlor.FitnessGoals.service.CardioExerciseService;
+import org.springframework.transaction.annotation.Transactional;
+
+@SpringBootTest
+@AutoConfigureMockMvc
+@Transactional
+@WithMockUser(username = "testuser", roles = "USER")
+public class CardioExerciseControllerTest {
+	
+	@Autowired
+	private MockMvc mvc;
+	
+	@Autowired
+	private CardioExerciseRepository cardioRepository;
+	
+	@Autowired
+	private CardioExerciseService cardioService;
+	
+	
+	
+	
+	@BeforeEach
+	public void setUp() throws Exception {
+		cardioRepository.deleteAll();
+	}
+	
+	@Test
+	public void testAddCardioExercise() throws Exception {
+		PaceDto paceDto = new PaceDto(10.0, PaceUnit.PER_MILE);
+		CardioExerciseDto ce1 = new CardioExerciseDto("Jog", 20.0, 200, paceDto);
+		
+		final String cardio = mvc.perform( post( "/api/cardio" ).contentType( "application/json" )
+				.content( TestUtils.asJsonString( ce1 ) ).accept( MediaType.APPLICATION_JSON ) ).andDo( print() )
+				.andExpect( status().isOk() ).andExpect( jsonPath( "$.name" ).value( "Jog" ) )
+				.andExpect( jsonPath( "$.durationMinutes" ).value( "20.0" ) )
+				.andExpect( jsonPath( "$.caloriesBurned" ).value( "200" ) )
+				.andExpect( jsonPath( "$.pace" ).value( "10.0" ) )
+				.andReturn().getResponse().getContentAsString();
+		
+		
+		assertTrue(cardio.contains("Jog"));
+		
+	}
+	
+	@Test
+	public void testGetCardioExercises() throws Exception {
+		final String cardio = mvc.perform( get( "/api/cardio" ) ).andDo( print() ).andExpect( status().isOk() )
+				.andReturn().getResponse().getContentAsString();
+		
+		
+		assertTrue(cardio.contains("[]"));
+		
+		PaceDto paceDto = new PaceDto(10.0, PaceUnit.PER_MILE);
+		
+		final CardioExerciseDto ce1 = new CardioExerciseDto("Jog", 20.0, 200, paceDto);
+		cardioService.addCardioExercise(ce1);
+		PaceDto paceDto2 = new PaceDto(2.1, PaceUnit.PER_500M);
+		
+		CardioExerciseDto ce2 = new CardioExerciseDto("Row", 20.0, 200, paceDto2);
+		cardioService.addCardioExercise(ce2);
+		
+		final String cardio2 = mvc.perform( get( "/api/cardio" ) ).andDo( print() ).andExpect( status().isOk() )
+				.andReturn().getResponse().getContentAsString();
+		
+		assertTrue(cardio2.contains("Jog"));
+		assertTrue(cardio2.contains("Row"));
+		
+	}
+	
+	@Test
+	public void testUpdateCardioExercise() throws Exception {
+		PaceDto paceDto = new PaceDto(10.0, PaceUnit.PER_MILE);
+		CardioExerciseDto ce1 = new CardioExerciseDto("Jog", 20.0, 200, paceDto);
+		final CardioExerciseDto savedCardioDto = cardioService.addCardioExercise(ce1);
+		
+		savedCardioDto.setName("Changed Cardio");
+		savedCardioDto.setDurationMinutes(30.0);
+		
+		mvc.perform( put( "/api/cardio/" + savedCardioDto.getId() ).contentType( "application/json" )
+				.content( TestUtils.asJsonString( savedCardioDto ) ).accept( MediaType.APPLICATION_JSON ) ).andDo( print() )
+				.andExpect( status().isOk() ).andExpect( jsonPath( "$.name" ).value( "Changed Cardio" ) )
+				.andExpect( jsonPath( "$.durationMinutes" ).value( "30.0" ) );
+		
+		
+		final String cardio = mvc.perform( get( "/api/cardio" ) ).andDo( print() ).andExpect( status().isOk() )
+				.andReturn().getResponse().getContentAsString();
+		
+		assertTrue(cardio.contains("Changed Cardio"));
+		assertFalse(cardio.contains("Jog"));
+		
+		
+	}
+	
+	@Test
+	public void testDeleteCardioExercise() throws Exception {
+		PaceDto paceDto = new PaceDto(10.0, PaceUnit.PER_MILE);
+		CardioExerciseDto ce1 = new CardioExerciseDto("Jog", 20.0, 200, paceDto);
+		final CardioExerciseDto savedCardioDto = cardioService.addCardioExercise(ce1);
+		
+		mvc.perform( delete( "/api/cardio/" + savedCardioDto.getId() ) ).andDo( print() )
+				.andExpect( status().isOk() );
+		
+		
+		final String cardio = mvc.perform( get( "/api/cardio" ) ).andDo( print() ).andExpect( status().isOk() )
+				.andReturn().getResponse().getContentAsString();
+		
+		assertFalse(cardio.contains("Jog"));
+		
+		
+	}
+	
+	@Test
+	public void testgetCardioExerciseByName() throws Exception{
+		PaceDto paceDto = new PaceDto(10.0, PaceUnit.PER_MILE);	
+		CardioExerciseDto ce1 = new CardioExerciseDto("Jog", 20.0, 200, paceDto);
+		final CardioExerciseDto savedCardioDto = cardioService.addCardioExercise(ce1);
+		mvc.perform(get("/api/cardio/name/" + savedCardioDto.getName())).andDo(print()).andExpect(status().isOk())
+				.andExpect(jsonPath("$.name").value("Jog"))
+				.andExpect(jsonPath("$.durationMinutes").value(20))
+				.andExpect(jsonPath("$.caloriesBurned").value(200))
+				.andExpect(jsonPath("$.pace").value(10));
+		
+//		mvc.perform(get("/api/cardio/name/NonExistent")).andDo(print()).andExpect(status().isNotFound());
+		
+	}
+	
+	@Test
+	public void testGetAllCardioExercises() throws Exception {
+		final CardioExerciseDto cardioDto1 = new CardioExerciseDto("Jog", 20.0, 200, 10.0);
+		cardioService.addCardioExercise(cardioDto1);
+		
+		final CardioExerciseDto cardioDto2 = new CardioExerciseDto("Swim", 30.0, 300, 8.0);
+		cardioService.addCardioExercise(cardioDto2);
+		
+		mvc.perform( get( "/api/cardio" ) ).andDo( print() ).andExpect( status().isOk() )
+				.andExpect( jsonPath( "$[0].name" ).value( "Jog" ) )
+				.andExpect( jsonPath( "$[0].durationMinutes" ).value( "20.0" ) )
+				.andExpect( jsonPath( "$[0].caloriesBurned" ).value( "200" ) )
+				.andExpect( jsonPath( "$[0].pace" ).value( "10.0" ) )
+				.andExpect( jsonPath( "$[1].name" ).value( "Swim" ) )
+				.andExpect( jsonPath( "$[1].durationMinutes" ).value( "30.0" ) )
+				.andExpect( jsonPath( "$[1].caloriesBurned" ).value( "300" ) )
+				.andExpect( jsonPath( "$[1].pace" ).value( "8.0" ) );
+		
+		
+	}
+	
+	@Test
+	public void testGetCardioExerciseById() throws Exception {
+		final CardioExerciseDto cardioDto = new CardioExerciseDto("Jog", 20, 200, 10);
+		final CardioExerciseDto savedCardioDto = cardioService.addCardioExercise(cardioDto);
+		
+		mvc.perform(get("/api/cardio/" + savedCardioDto.getId())).andDo(print()).andExpect(status().isOk())
+				.andExpect(jsonPath("$.name").value("Jog"))
+				.andExpect(jsonPath("$.durationMinutes").value(20))
+				.andExpect(jsonPath("$.caloriesBurned").value(200))
+				.andExpect(jsonPath("$.pace").value(10));
+		
+		
+	}
+
+}

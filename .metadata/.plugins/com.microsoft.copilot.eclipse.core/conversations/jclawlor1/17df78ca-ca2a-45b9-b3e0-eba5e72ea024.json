@@ -1,0 +1,55 @@
+{
+  "conversationId": "17df78ca-ca2a-45b9-b3e0-eba5e72ea024",
+  "title": "Why is it saying CardioExerciseDto is undefined?",
+  "requesterUsername": "jclawlor1",
+  "responderUsername": "GitHub Copilot",
+  "turns": [
+    {
+      "message": {
+        "text": "Why is it saying CardioExerciseDto is undefined?"
+      },
+      "currentDocument": {
+        "uri": "/backend/src/main/java/dev/jclawlor/FitnessGoals/mapper/CardioExerciseMapper.java"
+      },
+      "references": [],
+      "ignoredSkills": [],
+      "userLanguage": "en",
+      "source": "panel",
+      "model": "Auto",
+      "chatMode": "Ask",
+      "needToolCallConfirmation": true,
+      "turnId": "ea5159ac-5514-4142-9997-5f748991da2a",
+      "role": "user",
+      "timestamp": "2026-07-24T21:48:07.842191500Z"
+    },
+    {
+      "reply": {
+        "annotations": [],
+        "references": [],
+        "hideText": false,
+        "notifications": [],
+        "followups": [],
+        "errorMessages": [
+          {
+            "error": {
+              "message": "Oops, the model is not supported. Please try again.",
+              "code": 400
+            }
+          }
+        ],
+        "editAgentRounds": [],
+        "panelMessages": [],
+        "steps": [],
+        "agentMessages": [],
+        "data": {},
+        "modelName": "Claude Haiku 4.5",
+        "billingMultiplier": 1.0
+      },
+      "turnId": "3bbee241-bc09-4a44-8637-46b3a99dd6ed",
+      "role": "copilot",
+      "timestamp": "2026-07-24T21:48:08.286956100Z"
+    }
+  ],
+  "creationDate": "2026-07-24T21:48:07.750380900Z",
+  "lastMessageDate": "2026-07-24T21:48:09.883348700Z"
+}

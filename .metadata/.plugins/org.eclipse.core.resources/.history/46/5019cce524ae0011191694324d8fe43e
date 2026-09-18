@@ -1,0 +1,5 @@
+package dev.jclawlor.FitnessGoals.entity;
+
+public class Hydration {
+
+}

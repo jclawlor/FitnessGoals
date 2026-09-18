@@ -1,0 +1,91 @@
+import { useState, useEffect } from 'react';
+import TopBar from '../components/TopBar';
+import { getLogsByDate } from '../api/logsApi';
+import type { DailyLog } from '../types';
+
+export default function DashboardPage() {
+    const [selectedDate, setSelectedDate] = useState(new Date());
+    const [dailyLog, setDailyLog] = useState<DailyLog | null>(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+    
+
+    // "BREAKFAST" -> "Breakfast"
+    // function formatTimeOfDay(t: Meal['timeOfDay']): string {
+    //     return t.charAt(0) + t.slice(1).toLowerCase();
+    // }
+
+
+
+    useEffect(() => {
+        let cancelled = false;
+
+        async function fetchDailyLog() {
+            setLoading(true);
+            setError(null);
+            try {
+                const data = await getLogsByDate(selectedDate);
+                if (!cancelled) setDailyLog(data);
+            } catch {
+                if (!cancelled) setError('Failed to load log for this date.');
+            } finally {
+                if (!cancelled) setLoading(false);
+            }
+        }
+
+        fetchDailyLog();
+
+        return () => {
+            cancelled = true;
+        };
+    }, [selectedDate]);
+
+    return (
+        <div className="dashboard">
+            <TopBar selectedDate={selectedDate} onDateChange={setSelectedDate} />
+
+            <main>
+                {loading && <p>Loading logs...</p>}
+                {error && <p role="alert">{error}</p>}
+
+                {!loading && !error && dailyLog && (
+                    <>
+                        <section>
+                            <h2>Meals</h2>
+                            {dailyLog.meals.length === 0 && <p>No meals logged.</p>}
+                            {dailyLog.meals.map((meal) => (
+                                <div key={meal.id} className="log-entry-card">
+                                    <span>{meal.timeOfDay}</span>
+                                    <strong>{meal.name}</strong>
+                                    <span>{meal.calories} kcal</span>
+                                </div>
+                            ))}
+                        </section>
+
+                        <section>
+                            <h2>Cardio</h2>
+                            {dailyLog.cardioExercises.length === 0 && <p>No cardio logged.</p>}
+                            {dailyLog.cardioExercises.map((exercise) => (
+                                <div key={exercise.id} className="log-entry-card">
+                                    <strong>{exercise.name}</strong>
+                                    <span>{exercise.duration} min · {exercise.caloriesBurned} kcal</span>
+                                </div>
+                            ))}
+                        </section>
+
+                        <section>
+                            <h2>Weight Lifting</h2>
+                            {dailyLog.liftingExercises.length === 0 && <p>No lifting logged.</p>}
+                            {dailyLog.liftingExercises.map((exercise) => (
+                                <div key={exercise.id} className="log-entry-card">
+                                    <strong>{exercise.name}</strong>
+                                    <span>{exercise.sets}x{exercise.reps} @ {exercise.weight}lb</span>
+                                </div>
+                            ))}
+                        </section>
+                    </>
+                )}
+            </main>
+        </div>
+    );
+}

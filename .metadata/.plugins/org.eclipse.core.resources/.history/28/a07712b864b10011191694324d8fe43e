@@ -1,0 +1,127 @@
+package dev.jclawlor.FitnessGoals.controller;
+
+import java.time.LocalDate;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import dev.jclawlor.FitnessGoals.dto.DailyLogDto;
+import dev.jclawlor.FitnessGoals.service.impl.DailyLogServiceImpl;
+
+@RestController
+@RequestMapping("/api/logs")
+public class DailyLogController {
+	
+	@Autowired
+	private DailyLogServiceImpl dailyLogService;
+
+    @GetMapping
+    public ResponseEntity<List<DailyLogDto>> getAllLogs(
+            @AuthenticationPrincipal UserDetails userDetails) {
+        return ResponseEntity.ok(dailyLogService.getAllLogsForUser(userDetails.getUsername()));
+    }
+
+    @GetMapping("/{date}")
+    public ResponseEntity<DailyLogDto> getLogByDate(
+            @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+            @AuthenticationPrincipal UserDetails userDetails) {
+    	System.out.println("GETLOGBYDATE USERNAME MAKING REQUEST: " + userDetails.getUsername());
+        return ResponseEntity.ok(dailyLogService.getLogByDate(userDetails.getUsername(), date));
+    }
+
+    @PostMapping("/{date}")
+    public ResponseEntity<DailyLogDto> createLog(
+            @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+            @AuthenticationPrincipal UserDetails userDetails) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(dailyLogService.createLog(userDetails.getUsername(), date));
+    }
+
+    @DeleteMapping("/{date}")
+    public ResponseEntity<Void> deleteLog(
+            @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+            @AuthenticationPrincipal UserDetails userDetails) {
+        dailyLogService.deleteLog(userDetails.getUsername(), date);
+        return ResponseEntity.noContent().build();
+    }
+
+    // --- Meals ---
+    
+    @PostMapping("/{date}/meals/{mealId}")
+    public ResponseEntity<DailyLogDto> addMealById(
+			@PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+			@PathVariable Long mealId,
+			@AuthenticationPrincipal UserDetails userDetails) {
+		return ResponseEntity.ok(dailyLogService.addMealToLog(userDetails.getUsername(), date, mealId));
+	}
+    
+
+    @DeleteMapping("/{date}/meals/{mealId}")
+    public ResponseEntity<Void> removeMeal(
+            @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+            @PathVariable Long mealId,
+            @AuthenticationPrincipal UserDetails userDetails) {
+        dailyLogService.removeMealFromLog(userDetails.getUsername(), date, mealId);
+        return ResponseEntity.noContent().build();
+    }
+
+    // --- Lifting ---
+    
+    @PostMapping("/{date}/lifting/{exerciseId}")
+    public ResponseEntity<DailyLogDto> addLiftingById(
+			@PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+			@PathVariable Long exerciseId,
+			@AuthenticationPrincipal UserDetails userDetails) {
+		return ResponseEntity.ok(dailyLogService.addLiftingExerciseToLog(userDetails.getUsername(), date, exerciseId));
+	}
+
+    @DeleteMapping("/{date}/lifting/{exerciseId}")
+    public ResponseEntity<Void> removeLifting(
+            @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+            @PathVariable Long exerciseId,
+            @AuthenticationPrincipal UserDetails userDetails) {
+        dailyLogService.removeLiftingExerciseFromLog(userDetails.getUsername(), date, exerciseId);
+        return ResponseEntity.noContent().build();
+    }
+
+    // --- Cardio ---
+    
+    @PostMapping("/{date}/cardio/{exerciseId}")
+    public ResponseEntity<DailyLogDto> addCardioById(
+    		@PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+    		@PathVariable Long exerciseId,
+    		@AuthenticationPrincipal UserDetails userDetails) {
+    			return ResponseEntity.ok(dailyLogService.addCardioExerciseToLog(userDetails.getUsername(), date, exerciseId));
+    }
+
+    @DeleteMapping("/{date}/cardio/{exerciseId}")
+    public ResponseEntity<Void> removeCardio(
+            @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+            @PathVariable Long exerciseId,
+            @AuthenticationPrincipal UserDetails userDetails) {
+        dailyLogService.removeCardioExerciseFromLog(userDetails.getUsername(), date, exerciseId);
+        return ResponseEntity.noContent().build();
+    }
+    
+    @PatchMapping("/{date}/water/add")
+    public ResponseEntity<DailyLogDto> addWater(
+            @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+            @AuthenticationPrincipal UserDetails userDetails) {
+        return ResponseEntity.ok(dailyLogService.addWater(
+                userDetails.getUsername(), date));
+    }
+
+}

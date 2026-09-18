@@ -1,0 +1,15 @@
+package dev.jclawlor.FitnessGoals.entity;
+
+
+@Embeddable
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class Pace {
+	
+	private double minutes;
+	
+	@Enumerated(EnumType.STRING);
+	private PaceUnit unit;
+
+}

@@ -1,0 +1,183 @@
+package dev.jclawlor.FitnessGoals.service.impl;
+
+import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import dev.jclawlor.FitnessGoals.dto.DailyLogDto;
+import dev.jclawlor.FitnessGoals.entity.CardioExercise;
+import dev.jclawlor.FitnessGoals.entity.DailyLog;
+import dev.jclawlor.FitnessGoals.entity.LiftingExercise;
+import dev.jclawlor.FitnessGoals.entity.Meal;
+import dev.jclawlor.FitnessGoals.entity.User;
+import dev.jclawlor.FitnessGoals.mapper.CardioExerciseMapper;
+import dev.jclawlor.FitnessGoals.mapper.DailyLogMapper;
+import dev.jclawlor.FitnessGoals.mapper.LiftingExerciseMapper;
+import dev.jclawlor.FitnessGoals.mapper.MealMapper;
+import dev.jclawlor.FitnessGoals.mapper.UserMapper;
+import dev.jclawlor.FitnessGoals.repository.DailyLogRepository;
+import dev.jclawlor.FitnessGoals.service.DailyLogService;
+import lombok.RequiredArgsConstructor;
+
+@Service
+@RequiredArgsConstructor
+public class DailyLogServiceImpl implements DailyLogService {
+	
+	@Autowired
+	private DailyLogRepository dailyLogRepository;
+	
+	@Autowired
+	private DailyLogMapper dailyLogMapper;
+	
+	@Autowired
+	private UserServiceImpl userService;
+	
+	@Autowired
+	private UserMapper userMapper;
+	
+	@Autowired
+	private MealServiceImpl mealService;
+	
+	@Autowired
+	private LiftingExerciseServiceImpl liftingExerciseService;
+	
+	@Autowired
+	private CardioExerciseServiceImpl cardioExerciseService;
+	
+	@Autowired
+	private MealMapper mealMapper;
+	
+	@Autowired
+	private LiftingExerciseMapper liftingExerciseMapper;
+	
+	@Autowired 
+	private CardioExerciseMapper cardioExerciseMapper;
+	
+	
+
+	@Override
+	public List<DailyLogDto> getAllLogsForUser(String username) {
+		final List<DailyLog> dailyLogs = dailyLogRepository.findByUserUsername(username);
+		return dailyLogs.stream()
+				.map(dailyLogMapper::mapToDailyLogDto)
+				.collect(Collectors.toList());
+		
+		
+	}
+
+	@Override
+	public DailyLogDto getLogByDate(String username, LocalDate date) {
+	    DailyLog log = dailyLogRepository.findByUserUsernameAndDate(username, date);
+
+	    
+	    if (log == null) {
+	        return createLog(username, date);
+	    }
+
+	    return dailyLogMapper.mapToDailyLogDto(log);
+	}
+
+	@Override
+	public DailyLogDto createLog(String username, LocalDate date) {
+		System.out.println("createLog called for: " + username + " " + date);
+		User user = userMapper.mapToUser(userService.getUserByUsername(username)); // Check if user exists, will throw exception if not
+		DailyLog dailyLog = new DailyLog();
+		dailyLog.setDate(date);
+		dailyLog.setUser(user);
+		dailyLog.setWaterOunces(0.0);
+		DailyLog savedDailyLog = dailyLogRepository.save(dailyLog);
+		return dailyLogMapper.mapToDailyLogDto(savedDailyLog);
+		
+	}
+
+	@Override
+	public void deleteLog(String username, LocalDate date) {
+		DailyLog dailyLog = dailyLogRepository.findByUserUsernameAndDate(username, date);
+		if (dailyLog == null) {
+			throw new RuntimeException("DailyLog not found for user " + username + "for " + date);
+		}
+		dailyLogRepository.delete(dailyLog);
+	}
+
+	@Override
+	public DailyLogDto addMealToLog(String username, LocalDate date, Long mealId) {
+		DailyLog dailyLog = dailyLogRepository.findByUserUsernameAndDate(username, date);
+		Meal meal = mealMapper.mapToMeal(mealService.getMealById(mealId));
+		List<Meal> meals = dailyLog.getMeals();
+		if (meals == null) {
+			meals = new java.util.ArrayList<>();
+		}
+		meals.add(meal);
+		dailyLog.setMeals(meals);
+		
+		DailyLog savedDailyLog = dailyLogRepository.save(dailyLog);
+		return dailyLogMapper.mapToDailyLogDto(savedDailyLog);
+		
+		
+	}
+
+	@Override
+	public void removeMealFromLog(String username, LocalDate date, Long mealId) {
+		DailyLog dailyLog = dailyLogRepository.findByUserUsernameAndDate(username, date);
+		dailyLog.getMeals().removeIf(meal -> meal.getId().equals(mealId));
+		dailyLogRepository.save(dailyLog);
+		
+	}
+
+	@Override
+	public DailyLogDto addLiftingExerciseToLog(String username, LocalDate date, Long liftingExerciseId) {
+		DailyLog dailyLog = dailyLogRepository.findByUserUsernameAndDate(username, date);
+		LiftingExercise liftingExercise = liftingExerciseMapper.mapToLiftingExercise(liftingExerciseService.getLiftingExerciseById(liftingExerciseId));
+		List<LiftingExercise> liftingExercises = dailyLog.getLiftingExercises();
+		if (liftingExercises == null) {
+			liftingExercises = new java.util.ArrayList<>();
+		}
+		liftingExercises.add(liftingExercise);
+		dailyLog.setLiftingExercises(liftingExercises);
+		
+		DailyLog savedDailyLog = dailyLogRepository.save(dailyLog);
+		return dailyLogMapper.mapToDailyLogDto(savedDailyLog);
+	}
+
+	@Override
+	public void removeLiftingExerciseFromLog(String username, LocalDate date, Long liftingExerciseId) {
+		DailyLog dailyLog = dailyLogRepository.findByUserUsernameAndDate(username, date);
+		dailyLog.getLiftingExercises().removeIf(liftingExercise -> liftingExercise.getId().equals(liftingExerciseId));
+		dailyLogRepository.save(dailyLog);
+		
+	}
+
+	@Override
+	public DailyLogDto addCardioExerciseToLog(String username, LocalDate date, Long cardioExerciseId) {
+		DailyLog dailyLog = dailyLogRepository.findByUserUsernameAndDate(username, date);
+		CardioExercise cardioExercise = cardioExerciseMapper.mapToCardioExercise(cardioExerciseService.getCardioExerciseById(cardioExerciseId));
+		List<CardioExercise> cardioExercises = dailyLog.getCardioExercises();
+		if (cardioExercises == null) {
+			cardioExercises = new java.util.ArrayList<>();
+		}
+		cardioExercises.add(cardioExercise);
+		dailyLog.setCardioExercises(cardioExercises);
+		
+		DailyLog savedDailyLog = dailyLogRepository.save(dailyLog);
+		return dailyLogMapper.mapToDailyLogDto(savedDailyLog);
+	}
+
+	@Override
+	public void removeCardioExerciseFromLog(String username, LocalDate date, Long cardioExerciseId) {
+		DailyLog dailyLog = dailyLogRepository.findByUserUsernameAndDate(username, date);
+		dailyLog.getCardioExercises().removeIf(cardioExercise -> cardioExercise.getId().equals(cardioExerciseId));
+		dailyLogRepository.save(dailyLog);
+		
+	}
+	
+	@Override
+	public DailyLogDto addWater(String username, LocalDate date) {
+	    DailyLog log = dailyLogRepository.findByUserUsernameAndDate(username, date);
+	    log.setWaterOunces(log.getWaterOunces() + 16.0);
+	    return dailyLogMapper.mapToDailyLogDto(dailyLogRepository.save(log));
+	}
+	
+}

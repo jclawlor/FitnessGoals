@@ -1,0 +1,6 @@
+JavaScript Notes
+
+An async function in JavaScript is a specialized function declared with the async keyword that always returns a Promise and allows you to write asynchronous code using a cleaner, linear syntax.Instead of dealing with nested .then() callbacks, async functions allow you to use the await keyword to handle time-consuming operations (like API requests, file reading, or timers) as if they were standard, sequential code
+
+
+JavaScript is a dynamically typed language. This means variables can hold any type of data (numbers, strings, objects), and types can change unexpectedly. While flexible, this often leads to bugs where you might accidentally treat a text string like a number or call a function that doesn't exist. These errors only crash your application when a user runs the code.TypeScript fixes this by acting as a safety net. It lets you explicitly declare what kind of data your variables, function arguments, and objects should hold.

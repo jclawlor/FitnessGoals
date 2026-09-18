@@ -1,0 +1,30 @@
+package dev.jclawlor.FitnessGoals.service;
+
+import java.util.List;
+
+import dev.jclawlor.FitnessGoals.dto.DailyLogDto;
+
+public interface DailyLogService {
+	
+	List<DailyLogDto>getAllLogsForUser(String username);
+	
+	DailyLogDto getLogByDate(String username, java.time.LocalDate date);
+	
+	DailyLogDto createLog(String username, java.time.LocalDate date);
+	
+	void deleteLog(String username, java.time.LocalDate date);
+	
+	DailyLogDto addMealToLog(String username, java.time.LocalDate date, Long mealId);
+	
+	void removeMealFromLog(String username, java.time.LocalDate date, Long mealId);
+	
+	DailyLogDto addLiftingExerciseToLog(String username, java.time.LocalDate date, Long liftingExerciseId);
+	
+	void removeLiftingExerciseFromLog(String username, java.time.LocalDate date, Long liftingExerciseId);
+
+	DailyLogDto addCardioExerciseToLog(String username, java.time.LocalDate date, Long cardioExerciseId);
+	
+	void removeCardioExerciseFromLog(String username, java.time.LocalDate date, Long cardioExerciseId);
+	
+	DailyLogDto addWater(String username, java.time.LocalDate date);
+}

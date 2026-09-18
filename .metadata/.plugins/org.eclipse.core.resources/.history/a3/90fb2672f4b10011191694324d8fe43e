@@ -1,0 +1,343 @@
+package dev.jclawlor.FitnessGoals.service;
+
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import java.time.LocalDate;
+import java.util.List;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
+
+import dev.jclawlor.FitnessGoals.dto.CardioExerciseDto;
+import dev.jclawlor.FitnessGoals.dto.DailyLogDto;
+import dev.jclawlor.FitnessGoals.dto.LiftingExerciseDto;
+import dev.jclawlor.FitnessGoals.dto.MealDto;
+import dev.jclawlor.FitnessGoals.dto.PaceDto;
+import dev.jclawlor.FitnessGoals.dto.RegisterRequestDto;
+import dev.jclawlor.FitnessGoals.enums.PaceUnit;
+import dev.jclawlor.FitnessGoals.enums.TimeOfDay;
+import dev.jclawlor.FitnessGoals.repository.CardioExerciseRepository;
+import dev.jclawlor.FitnessGoals.repository.DailyLogRepository;
+import dev.jclawlor.FitnessGoals.repository.LiftingExerciseRepository;
+import dev.jclawlor.FitnessGoals.repository.MealRepository;
+import dev.jclawlor.FitnessGoals.repository.UserRepository;
+
+@SpringBootTest
+public class DailyLogServiceTest {
+	
+	@Autowired
+	private DailyLogRepository dailyLogRepository;
+	
+	@Autowired
+	private UserRepository userRepository;
+	
+	@Autowired
+	private MealRepository mealRepository;
+	
+	@Autowired
+	private LiftingExerciseRepository liftingExerciseRepository;
+	
+	@Autowired
+	private CardioExerciseRepository cardioExerciseRepository;
+	
+	@Autowired
+	private DailyLogService dailyLogService;
+	
+	@Autowired
+	private AuthService authService;
+	
+	@Autowired
+	private MealService mealService;
+	
+	@Autowired
+	private LiftingExerciseService liftingExerciseService;
+	
+	@Autowired
+	private CardioExerciseService cardioExerciseService;
+	
+	@BeforeEach
+	public void setUp() throws Exception {
+		dailyLogRepository.deleteAll();
+		userRepository.deleteAll();
+		mealRepository.deleteAll();
+		liftingExerciseRepository.deleteAll();
+		cardioExerciseRepository.deleteAll();
+	}
+	
+	
+	@Test
+	@Transactional
+	public void testGetAllLogsForUser() {
+		final RegisterRequestDto registerDto = new RegisterRequestDto("testuser1", "testemail1", "testpassword1");
+		authService.register(registerDto);
+		LocalDate date1 = LocalDate.of(2024, 6, 1);
+		LocalDate date2 = LocalDate.of(2024, 6, 2);
+		LocalDate date3 = LocalDate.of(2024, 6, 3);
+		
+		dailyLogService.createLog("testuser1", date1);
+		dailyLogService.createLog("testuser1", date2);
+		dailyLogService.createLog("testuser1", date3);
+		List<DailyLogDto> dailyLogList = dailyLogService.getAllLogsForUser("testuser1");
+		assertAll("DailyLogDto contents",
+				() -> assertEquals(3, dailyLogList.size()),
+				() -> assertEquals(date1, dailyLogList.get(0).getDate()),
+				() -> assertEquals(date2, dailyLogList.get(1).getDate()),
+				() -> assertEquals(date3, dailyLogList.get(2).getDate()));
+		
+		
+		
+		
+	}
+	
+	@Test
+	@Transactional
+	public void testGetLogByDate() {
+		final RegisterRequestDto registerDto = new RegisterRequestDto("testuser1", "testemail1", "testpassword1");
+		authService.register(registerDto);
+		LocalDate date1 = LocalDate.of(2024, 6, 1);
+		LocalDate date2 = LocalDate.of(2024, 6, 2);
+		
+		
+		
+		dailyLogService.createLog("testuser1", date1);
+		DailyLogDto dailyLogDto = dailyLogService.getLogByDate("testuser1", date1);
+		assertAll("DailyLogDto contents",
+				() -> assertEquals("testuser1", dailyLogDto.getUsername()),
+				() -> assertEquals(date1, dailyLogDto.getDate()),
+				() -> assertNotEquals(date2, dailyLogDto.getDate()));
+		
+	}
+	
+	@Transactional
+	@Test
+	public void testCreateLog() {
+		final RegisterRequestDto registerDto = new RegisterRequestDto("testuser1", "testemail1", "testpassword1");
+		authService.register(registerDto);
+		LocalDate date1 = LocalDate.of(2024, 6, 1);
+		
+		DailyLogDto dailyLogDto = dailyLogService.createLog("testuser1", date1);
+		assertAll("DailyLogDto contents",
+				() -> assertEquals("testuser1", dailyLogDto.getUsername()),
+				() -> assertEquals(date1, dailyLogDto.getDate()),
+				() -> assertEquals(0, dailyLogDto.getMeals().size()),
+				() -> assertEquals(0, dailyLogDto.getLiftingExercises().size()),
+				() -> assertEquals(0, dailyLogDto.getCardioExercises().size()),
+				() -> assertEquals(0, dailyLogDto.getWaterOunces()));
+		
+		LocalDate date2 = LocalDate.of(2024, 6, 2);
+		DailyLogDto dailyLogDto2 = dailyLogService.createLog("testuser1", date2);
+		assertAll("DailyLogDto contents",
+				() -> assertEquals("testuser1", dailyLogDto2.getUsername()),
+				() -> assertEquals(date2, dailyLogDto2.getDate()));
+	}
+	
+	
+	@Test
+	@Transactional
+	public void testDeleteLog() {
+		final RegisterRequestDto registerDto = new RegisterRequestDto("testuser1", "testemail1", "testpassword1");
+		authService.register(registerDto);
+		LocalDate date1 = LocalDate.of(2024, 6, 1);
+		
+		dailyLogService.createLog("testuser1", date1);
+		dailyLogService.deleteLog("testuser1", date1);
+		List<DailyLogDto> dailyLogList = dailyLogService.getAllLogsForUser("testuser1");
+		assertEquals(0, dailyLogList.size());
+		
+	}
+	
+	
+	@Test
+	@Transactional
+	public void testAddMealToLog() {
+		final RegisterRequestDto registerDto = new RegisterRequestDto("testuser1", "testemail1", "testpassword1");
+		authService.register(registerDto);
+		LocalDate date1 = LocalDate.of(2024, 6, 1);
+		
+		dailyLogService.createLog("testuser1", date1);
+		MealDto mealDto = new MealDto("Eggs", 500, 20, 30, 10, TimeOfDay.BREAKFAST);
+		MealDto createdMealDto = mealService.addMeal(mealDto);
+		Long mealId = createdMealDto.getId();
+		
+		DailyLogDto dailyLogDto = dailyLogService.addMealToLog("testuser1", date1, mealId);
+		assertAll("DailyLogDto contents",
+				() -> assertEquals("testuser1", dailyLogDto.getUsername()),
+				() -> assertEquals(date1, dailyLogDto.getDate()),
+				() -> assertEquals(1, dailyLogDto.getMeals().size()),
+				() -> assertEquals("Eggs", dailyLogDto.getMeals().get(0).getName()),
+				() -> assertEquals(TimeOfDay.BREAKFAST, dailyLogDto.getMeals().get(0).getTimeOfDay()),
+				() -> assertEquals(0, dailyLogDto.getWaterOunces()));
+		
+		
+	}
+	
+	
+	
+	@Test
+	@Transactional
+	public void testAddLiftingExerciseToLog() {
+		final RegisterRequestDto registerDto = new RegisterRequestDto("testuser1", "testemail1", "testpassword1");
+		authService.register(registerDto);
+		LocalDate date1 = LocalDate.of(2024, 6, 1);
+		
+		dailyLogService.createLog("testuser1", date1);
+		LiftingExerciseDto liftingExerciseDto = new LiftingExerciseDto("Bench Press", 3, 10, 100);
+		LiftingExerciseDto createdLiftingExerciseDto = liftingExerciseService.addLiftingExercise(liftingExerciseDto);
+		Long liftingExerciseId = createdLiftingExerciseDto.getId();
+		
+		DailyLogDto dailyLogDto = dailyLogService.addLiftingExerciseToLog("testuser1", date1, liftingExerciseId);
+		assertAll("DailyLogDto contents",
+				() -> assertEquals("testuser1", dailyLogDto.getUsername()),
+				() -> assertEquals(date1, dailyLogDto.getDate()),
+				() -> assertEquals(1, dailyLogDto.getLiftingExercises().size()),
+				() -> assertEquals("Bench Press", dailyLogDto.getLiftingExercises().get(0).getName()));
+	}
+	
+	@Test
+	@Transactional
+	public void testAddCardioExerciseToLog() {
+		final RegisterRequestDto registerDto = new RegisterRequestDto("testuser1", "testemail1", "testpassword1");
+		authService.register(registerDto);
+		LocalDate date1 = LocalDate.of(2024, 6, 1);
+		
+		dailyLogService.createLog("testuser1", date1);
+
+		PaceDto paceDto = new PaceDto(10.0, PaceUnit.PER_MILE);
+		CardioExerciseDto ce1 = new CardioExerciseDto("Jog", 20.0, 200, paceDto);
+		CardioExerciseDto createdCardioExerciseDto = cardioExerciseService.addCardioExercise(cardioExerciseDto);
+		Long cardioExerciseId = createdCardioExerciseDto.getId();
+		
+		DailyLogDto dailyLogDto = dailyLogService.addCardioExerciseToLog("testuser1", date1, cardioExerciseId);
+		assertAll("DailyLogDto contents",
+				() -> assertEquals("testuser1", dailyLogDto.getUsername()),
+				() -> assertEquals(date1, dailyLogDto.getDate()),
+				() -> assertEquals(1, dailyLogDto.getCardioExercises().size()),
+				() -> assertEquals("Running", dailyLogDto.getCardioExercises().get(0).getName()));
+	}
+	
+	@Test
+	@Transactional
+	public void testRemoveCardioExerciseFromLog() {
+		final RegisterRequestDto registerDto = new RegisterRequestDto("testuser1", "testemail1", "testpassword1");
+		authService.register(registerDto);
+		LocalDate date1 = LocalDate.of(2024, 6, 1);
+		
+		dailyLogService.createLog("testuser1", date1);
+		CardioExerciseDto cardioExerciseDto = new CardioExerciseDto("Running", 30, 200, 9);
+		CardioExerciseDto createdCardioExerciseDto = cardioExerciseService.addCardioExercise(cardioExerciseDto);
+		Long cardioExerciseId = createdCardioExerciseDto.getId();
+		
+		DailyLogDto dailyLogDto = dailyLogService.addCardioExerciseToLog("testuser1", date1, cardioExerciseId);
+		
+		dailyLogService.removeCardioExerciseFromLog("testuser1", date1, cardioExerciseId);
+		assertAll("DailyLogDto contents",
+				() -> assertEquals("testuser1", dailyLogDto.getUsername()),
+				() -> assertEquals(date1, dailyLogDto.getDate()),
+				() -> assertEquals(0, dailyLogDto.getCardioExercises().size()));
+	}
+	
+	@Test
+	@Transactional
+	public void testRemoveLiftingExerciseFromLog() {
+		final RegisterRequestDto registerDto = new RegisterRequestDto("testuser1", "testemail1", "testpassword1");
+		authService.register(registerDto);
+		LocalDate date1 = LocalDate.of(2024, 6, 1);
+		
+		dailyLogService.createLog("testuser1", date1);
+		LiftingExerciseDto liftingExerciseDto = new LiftingExerciseDto("Bench Press", 3, 10, 100);
+		LiftingExerciseDto createdLiftingExerciseDto = liftingExerciseService.addLiftingExercise(liftingExerciseDto);
+		Long liftingExerciseId = createdLiftingExerciseDto.getId();
+		
+		DailyLogDto dailyLogDto = dailyLogService.addLiftingExerciseToLog("testuser1", date1, liftingExerciseId);
+		
+		dailyLogService.removeLiftingExerciseFromLog("testuser1", date1, liftingExerciseId);
+		assertAll("DailyLogDto contents",
+				() -> assertEquals("testuser1", dailyLogDto.getUsername()),
+				() -> assertEquals(date1, dailyLogDto.getDate()),
+				() -> assertEquals(0, dailyLogDto.getLiftingExercises().size()));
+	}
+	
+	@Test
+	@Transactional
+	public void testRemoveMealFromLog() {
+		final RegisterRequestDto registerDto = new RegisterRequestDto("testuser1", "testemail1", "testpassword1");
+		authService.register(registerDto);
+		LocalDate date1 = LocalDate.of(2024, 6, 1);
+		
+		dailyLogService.createLog("testuser1", date1);
+		MealDto mealDto = new MealDto("Eggs", 500, 20, 30, 10, TimeOfDay.BREAKFAST);
+		MealDto createdMealDto = mealService.addMeal(mealDto);
+		Long mealId = createdMealDto.getId();
+		
+		DailyLogDto dailyLogDto = dailyLogService.addMealToLog("testuser1", date1, mealId);
+		
+		dailyLogService.removeMealFromLog("testuser1", date1, mealId);
+		assertAll("DailyLogDto contents",
+				() -> assertEquals("testuser1", dailyLogDto.getUsername()),
+				() -> assertEquals(date1, dailyLogDto.getDate()),
+				() -> assertEquals(0, dailyLogDto.getMeals().size()));
+	}
+	
+	@Test
+	@Transactional
+	public void testAddWater() {
+		final RegisterRequestDto registerDto = new RegisterRequestDto("testuser1", "testemail1", "testpassword1");
+		authService.register(registerDto);
+		LocalDate date1 = LocalDate.of(2024, 6, 1);
+		
+		dailyLogService.createLog("testuser1", date1);
+		
+		assertEquals(0.0, dailyLogService.getLogByDate("testuser1", date1).getWaterOunces());
+		
+		DailyLogDto dailyLogDto = dailyLogService.addWater("testuser1", date1);
+		assertAll("DailyLogDto contents",
+				() -> assertEquals("testuser1", dailyLogDto.getUsername()),
+				() -> assertEquals(date1, dailyLogDto.getDate()),
+				() -> assertEquals(16.0, dailyLogDto.getWaterOunces()));
+		
+		DailyLogDto dailyLogDto2 = dailyLogService.addWater("testuser1", date1);
+		assertAll("DailyLogDto contents",
+				() -> assertEquals("testuser1", dailyLogDto2.getUsername()),
+				() -> assertEquals(date1, dailyLogDto2.getDate()),
+				() -> assertEquals(32.0, dailyLogDto2.getWaterOunces()));
+		
+	}
+	
+	
+	@Test
+	@Transactional
+	public void testResetWater() {
+		final RegisterRequestDto registerDto = new RegisterRequestDto("testuser1", "testemail1", "testpassword1");
+		authService.register(registerDto);
+		LocalDate date1 = LocalDate.of(2024, 6, 1);
+		
+		dailyLogService.createLog("testuser1", date1);
+		
+		DailyLogDto dailyLogDto = dailyLogService.addWater("testuser1", date1);
+		assertAll("DailyLogDto contents",
+				() -> assertEquals("testuser1", dailyLogDto.getUsername()),
+				() -> assertEquals(date1, dailyLogDto.getDate()),
+				() -> assertEquals(16.0, dailyLogDto.getWaterOunces()));
+		
+		DailyLogDto dailyLogDto2 = dailyLogService.resetWater("testuser1", date1);
+		assertAll("DailyLogDto contents",
+				() -> assertEquals("testuser1", dailyLogDto2.getUsername()),
+				() -> assertEquals(date1, dailyLogDto2.getDate()),
+				() -> assertEquals(0.0, dailyLogDto2.getWaterOunces()));
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+
+}

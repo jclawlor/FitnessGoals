@@ -1,0 +1,14 @@
+package dev.jclawlor.FitnessGoals.dto;
+
+import dev.jclawlor.FitnessGoals.enums.PaceUnit;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class PaceDto {
+	private double minutes;
+	private PaceUnit unit;
+}

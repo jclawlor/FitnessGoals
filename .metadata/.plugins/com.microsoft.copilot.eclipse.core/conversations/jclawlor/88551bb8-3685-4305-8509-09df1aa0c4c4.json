@@ -1,0 +1,100 @@
+{
+  "conversationId": "88551bb8-3685-4305-8509-09df1aa0c4c4",
+  "title": "When getLogByDate returns the DailyLogDto it will ...",
+  "requesterUsername": "jclawlor",
+  "responderUsername": "GitHub Copilot",
+  "turns": [
+    {
+      "message": {
+        "text": "When getLogByDate returns the DailyLogDto it will contain a list of meals and each Meal will have a TimeOfDay enum. Can this enum be resolved to a string in the frontend? Or does it have to be converted to a string before the controller passes it forward?"
+      },
+      "currentDocument": {
+        "uri": "/backend/src/main/java/dev/jclawlor/FitnessGoals/controller/DailyLogController.java"
+      },
+      "references": [],
+      "ignoredSkills": [],
+      "userLanguage": "en",
+      "source": "panel",
+      "model": "Auto",
+      "chatMode": "Ask",
+      "needToolCallConfirmation": true,
+      "turnId": "c613b960-77c2-4e71-bec2-cdc7649b0368",
+      "role": "user",
+      "timestamp": "2026-08-24T23:00:23.432662700Z"
+    },
+    {
+      "reply": {
+        "annotations": [],
+        "references": [],
+        "hideText": false,
+        "notifications": [],
+        "followups": [],
+        "errorMessages": [
+          {
+            "error": {
+              "message": "No model configuration found",
+              "code": -1
+            }
+          }
+        ],
+        "editAgentRounds": [],
+        "panelMessages": [],
+        "steps": [],
+        "agentMessages": [],
+        "data": {},
+        "modelName": "auto",
+        "billingMultiplier": 0.0
+      },
+      "turnId": "c613b960-77c2-4e71-bec2-cdc7649b0368",
+      "role": "copilot",
+      "timestamp": "2026-08-24T23:00:23.889816800Z"
+    },
+    {
+      "message": {
+        "text": "Hello"
+      },
+      "currentDocument": {
+        "uri": "/backend/src/main/java/dev/jclawlor/FitnessGoals/controller/DailyLogController.java"
+      },
+      "references": [],
+      "ignoredSkills": [],
+      "userLanguage": "en",
+      "source": "panel",
+      "model": "Auto",
+      "chatMode": "Ask",
+      "needToolCallConfirmation": true,
+      "turnId": "ffa6266b-68d5-4cf0-ab51-e138159203d8",
+      "role": "user",
+      "timestamp": "2026-08-24T23:00:41.025329800Z"
+    },
+    {
+      "reply": {
+        "annotations": [],
+        "references": [],
+        "hideText": false,
+        "notifications": [],
+        "followups": [],
+        "errorMessages": [
+          {
+            "error": {
+              "message": "No model configuration found",
+              "code": -1
+            }
+          }
+        ],
+        "editAgentRounds": [],
+        "panelMessages": [],
+        "steps": [],
+        "agentMessages": [],
+        "data": {},
+        "modelName": "auto",
+        "billingMultiplier": 0.0
+      },
+      "turnId": "ffa6266b-68d5-4cf0-ab51-e138159203d8",
+      "role": "copilot",
+      "timestamp": "2026-08-24T23:00:41.071697900Z"
+    }
+  ],
+  "creationDate": "2026-08-24T23:00:23.365605400Z",
+  "lastMessageDate": "2026-08-24T23:00:41.133825300Z"
+}

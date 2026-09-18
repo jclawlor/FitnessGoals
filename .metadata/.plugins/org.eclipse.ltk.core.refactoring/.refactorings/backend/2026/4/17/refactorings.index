@@ -1,0 +1,13 @@
+1776699759511	Delete element
+1776699766397	Delete element
+1776699813548	Rename type 'ExerciseController'
+1776699872430	Rename type 'ExerciseServiceImpl'
+1776699882940	Rename type 'ExerciseService'
+1776700138517	Rename type 'ExerciseServiceTest'
+1776700612123	Rename type 'ExerciseMapper'
+1776700890666	Rename local variable 'savedCardioExercise'
+1776700915346	Rename local variable 'savedCardioExerciseDto'
+1776701657280	Rename field 'exerciseService'
+1776728331578	Rename field 'cardioRepository'
+1776728367291	Rename field 'cardioService'
+1776729224692	Delete element

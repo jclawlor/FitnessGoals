@@ -1,0 +1,81 @@
+package dev.jclawlor.FitnessGoals.service.impl;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import dev.jclawlor.FitnessGoals.dto.CardioExerciseDto;
+import dev.jclawlor.FitnessGoals.entity.CardioExercise;
+import dev.jclawlor.FitnessGoals.mapper.CardioExerciseMapper;
+import dev.jclawlor.FitnessGoals.repository.CardioExerciseRepository;
+import dev.jclawlor.FitnessGoals.service.CardioExerciseService;
+import lombok.RequiredArgsConstructor;
+
+@Service
+@RequiredArgsConstructor
+public class CardioExerciseServiceImpl implements CardioExerciseService {
+    
+    /** Repository for cardio exercises */
+	@Autowired
+    private CardioExerciseRepository cardioRepository;
+	
+	
+	@Autowired
+	private CardioExerciseMapper exerciseMapper;
+
+    public CardioExerciseDto addCardioExercise(CardioExerciseDto dto) {
+        CardioExercise exercise = exerciseMapper.mapToCardioExercise(dto);
+        
+//        exercise.setName(dto.getName());
+//        exercise.setDurationMinutes(dto.getDurationMinutes());
+//        exercise.setCaloriesBurned(dto.getCaloriesBurned());
+//        exercise.setPace(dto.getPace());
+        
+        
+        CardioExercise savedCardioExercise = cardioRepository.save(exercise);
+        CardioExerciseDto savedCardioExerciseDto = exerciseMapper.mapToCardioExerciseDto(savedCardioExercise);
+        return savedCardioExerciseDto;
+    }
+
+	@Override
+	public CardioExerciseDto updateCardioExercise(Long id, CardioExerciseDto dto) {
+		CardioExercise exercise = cardioRepository.findById(id).orElseThrow(() -> new RuntimeException("Cardio exercise not found with id: " + id));
+		exercise.setName(dto.getName());
+		exercise.setDurationMinutes(dto.getDurationMinutes());
+		exercise.setCaloriesBurned(dto.getCaloriesBurned());
+		exercise.setPace(dto.getPace());
+		
+		
+		CardioExercise savedCardioExercise = cardioRepository.save(exercise);
+        return exerciseMapper.mapToCardioExerciseDto(savedCardioExercise);
+	}
+	
+	@Override
+	public void deleteCardioExercise(Long id) {
+		if (!cardioRepository.existsById(id)) {
+			throw new RuntimeException("Cardio exercise not found with id: " + id);
+		}
+		cardioRepository.deleteById(id);
+	}
+	
+	@Override
+	public List<CardioExerciseDto> getAllCardioExercises() {
+		return cardioRepository.findAll().stream()
+				.map(exerciseMapper::mapToCardioExerciseDto)
+				.toList();
+	}
+
+	@Override
+	public CardioExerciseDto getCardioExerciseById(Long id) {
+		CardioExercise cardioExercise = cardioRepository.findById(id).orElseThrow(() -> new RuntimeException("Cardio exercise not found with id: " + id));
+		return exerciseMapper.mapToCardioExerciseDto(cardioExercise);
+	}
+	
+	public CardioExerciseDto getCardioExerciseByName(String name) {
+		CardioExercise cardioExercise = cardioRepository.findByName(name).orElseThrow(() -> new RuntimeException("Cardio exercise not found with name: " + name));
+		return exerciseMapper.mapToCardioExerciseDto(cardioExercise);
+	}
+    
+    
+}

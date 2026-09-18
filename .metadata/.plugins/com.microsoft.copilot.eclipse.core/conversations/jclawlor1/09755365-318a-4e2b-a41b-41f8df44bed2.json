@@ -1,0 +1,50 @@
+{
+  "conversationId": "09755365-318a-4e2b-a41b-41f8df44bed2",
+  "title": "Using MockMvc Matchers",
+  "requesterUsername": "jclawlor1",
+  "responderUsername": "GitHub Copilot",
+  "turns": [
+    {
+      "message": {
+        "text": "What import do I need for content()"
+      },
+      "currentDocument": {
+        "uri": "/backend/src/test/java/dev/jclawlor/FitnessGoals/controller/MealControllerTest.java"
+      },
+      "references": [],
+      "ignoredSkills": [],
+      "userLanguage": "en",
+      "source": "panel",
+      "model": "GPT-5 mini",
+      "chatMode": "Ask",
+      "needToolCallConfirmation": true,
+      "turnId": "0e1493a7-a182-44b6-b14e-ede125766a4d",
+      "role": "user",
+      "timestamp": "2026-03-23T18:16:11.146334300Z"
+    },
+    {
+      "reply": {
+        "text": "Add the static import for MockMvc\u0027s `content()` matcher:\n\n```java\nimport static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;\n```",
+        "annotations": [],
+        "references": [],
+        "hideText": false,
+        "notifications": [],
+        "followups": [],
+        "errorMessages": [],
+        "editAgentRounds": [],
+        "panelMessages": [],
+        "steps": [],
+        "agentMessages": [],
+        "data": {},
+        "modelName": "GPT-5 mini",
+        "billingMultiplier": 1.0
+      },
+      "suggestedTitle": "Using MockMvc Matchers",
+      "turnId": "0a9ffae7-02d1-4960-ad6a-2541b1a75432",
+      "role": "copilot",
+      "timestamp": "2026-03-23T18:16:11.588726100Z"
+    }
+  ],
+  "creationDate": "2026-03-23T18:16:11.127326200Z",
+  "lastMessageDate": "2026-03-23T18:16:19.994862600Z"
+}

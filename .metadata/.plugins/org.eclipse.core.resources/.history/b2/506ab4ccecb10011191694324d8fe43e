@@ -1,0 +1,23 @@
+package dev.jclawlor.FitnessGoals.entity;
+
+import dev.jclawlor.FitnessGoals.enums.PaceUnit;
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+
+@Embeddable
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class Pace {
+	
+	private double minutes;
+	
+	@Enumerated(EnumType.STRING)
+	private PaceUnit unit;
+
+}

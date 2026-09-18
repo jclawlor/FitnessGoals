@@ -1,0 +1,305 @@
+package dev.jclawlor.FitnessGoals.controller;
+
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
+
+import dev.jclawlor.FitnessGoals.dto.CardioExerciseDto;
+import dev.jclawlor.FitnessGoals.dto.DailyLogDto;
+import dev.jclawlor.FitnessGoals.dto.LiftingExerciseDto;
+import dev.jclawlor.FitnessGoals.dto.MealDto;
+import dev.jclawlor.FitnessGoals.dto.RegisterRequestDto;
+import dev.jclawlor.FitnessGoals.entity.TimeOfDay;
+import dev.jclawlor.FitnessGoals.repository.CardioExerciseRepository;
+import dev.jclawlor.FitnessGoals.repository.DailyLogRepository;
+import dev.jclawlor.FitnessGoals.repository.LiftingExerciseRepository;
+import dev.jclawlor.FitnessGoals.repository.MealRepository;
+import dev.jclawlor.FitnessGoals.repository.UserRepository;
+import dev.jclawlor.FitnessGoals.service.AuthService;
+import dev.jclawlor.FitnessGoals.service.CardioExerciseService;
+import dev.jclawlor.FitnessGoals.service.DailyLogService;
+import dev.jclawlor.FitnessGoals.service.LiftingExerciseService;
+import dev.jclawlor.FitnessGoals.service.MealService;
+
+@SpringBootTest
+@AutoConfigureMockMvc
+@WithMockUser(username = "testuser", roles = "USER")
+public class DailyLogControllerTest {
+	
+	@Autowired
+	private MockMvc mvc;
+	
+	@Autowired
+	private DailyLogRepository dailyLogRepository;
+	
+	@Autowired
+	private MealRepository mealRepository;
+	
+	@Autowired
+	private LiftingExerciseRepository liftingExerciseRepository;
+	
+	@Autowired
+	private CardioExerciseRepository cardioExerciseRepository;
+	
+	@Autowired
+	private UserRepository userRepository;
+	
+	@Autowired
+	private AuthService authService;
+	
+	@Autowired
+	private DailyLogService dailyLogService;
+	
+	@Autowired
+	private MealService mealService;
+	
+	@Autowired
+	private LiftingExerciseService liftingExerciseService;
+	
+	@Autowired
+	private CardioExerciseService cardioExerciseService;
+	
+	@BeforeEach
+	public void setUp() throws Exception {
+		dailyLogRepository.deleteAll();
+		mealRepository.deleteAll();
+		liftingExerciseRepository.deleteAll();
+		cardioExerciseRepository.deleteAll();
+		userRepository.deleteAll();
+	}
+	
+	@Test
+	@Transactional
+	public void testGetAllLogs() throws Exception {
+		RegisterRequestDto registerRequest = new RegisterRequestDto("testuser", "testuser@gmail.com", "password");
+		authService.register(registerRequest);
+		
+		final String logs = mvc.perform( get( "/api/logs" ) ).andDo( print() ).andExpect( status().isOk() )
+                .andReturn().getResponse().getContentAsString();
+		
+		
+		assertTrue(logs.contains("[]"));
+		
+		dailyLogService.createLog("testuser", java.time.LocalDate.of(2024, 6, 1));
+		mvc.perform(get("/api/logs"))
+			.andDo(print())
+			.andExpect(status().isOk());
+		
+		DailyLogDto createdLog = dailyLogService.getLogByDate("testuser", java.time.LocalDate.of(2024, 6, 1));
+		assertEquals(java.time.LocalDate.of(2024, 6, 1), createdLog.getDate());
+	}
+	
+	@Test
+	@Transactional
+	public void testGetLogByDate() throws Exception {
+		RegisterRequestDto registerRequest = new RegisterRequestDto("testuser", "testuser@gmail.com", "password");
+		authService.register(registerRequest);
+		
+		
+		dailyLogService.createLog("testuser", java.time.LocalDate.of(2024, 6, 1));
+		dailyLogService.createLog("testuser", java.time.LocalDate.of(2024, 6, 2));
+		mvc.perform( get( "/api/logs/2024-06-01" ) ).andDo( print() ).andExpect( status().isOk() );
+		
+		mvc.perform( get( "/api/logs/2024-06-02" ) ).andDo( print() ).andExpect( status().isOk() );
+		
+		DailyLogDto log1 = dailyLogService.getLogByDate("testuser", java.time.LocalDate.of(2024, 6, 1));
+		DailyLogDto log2 = dailyLogService.getLogByDate("testuser", java.time.LocalDate.of(2024, 6, 2));
+		
+		assertAll(
+			() -> assertEquals(java.time.LocalDate.of(2024, 6, 1), log1.getDate()),
+			() -> assertEquals(java.time.LocalDate.of(2024, 6, 2), log2.getDate())
+		);
+		
+	}
+	
+	
+	@Test
+	@Transactional
+	public void testCreateLog() throws Exception {
+		RegisterRequestDto registerRequest = new RegisterRequestDto("testuser", "testuser@gmail.com", "password");
+		authService.register(registerRequest);
+		
+		mvc.perform(post("/api/logs/2024-06-01"))
+			.andDo(print())
+			.andExpect(status().isCreated())
+			.andExpect(jsonPath("$.date").value("2024-06-01"));
+		
+	}
+	
+	@Test
+	@Transactional
+	public void testDeleteLog() throws Exception {
+		RegisterRequestDto registerRequest = new RegisterRequestDto("testuser", "testuser@gmail.com", "password");
+		authService.register(registerRequest);
+		
+		dailyLogService.createLog("testuser", java.time.LocalDate.of(2024, 6, 1));
+		mvc.perform(delete("/api/logs/2024-06-01"))
+			.andDo(print())
+			.andExpect(status().isNoContent());
+		
+		
+	}
+	
+	
+	@Test
+	@Transactional
+	public void testAddMealById() throws Exception {
+		RegisterRequestDto registerRequest = new RegisterRequestDto("testuser", "testuser@gmail.com", "password");
+		authService.register(registerRequest);
+		dailyLogService.createLog("testuser", java.time.LocalDate.of(2024, 6, 1));
+		
+		MealDto mealDto = new MealDto("Chicken Salad", 400, 20, 30, 10, TimeOfDay.LUNCH);
+		MealDto savedMealDto = mealService.addMeal(mealDto);
+		mvc.perform(post("/api/logs/2024-06-01/meals/" + savedMealDto.getId())
+				.accept(MediaType.APPLICATION_JSON))
+				.andDo(print())
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.meals[0].name").value("Chicken Salad"))
+			.andExpect(jsonPath("$.meals[0].calories").value(400))
+			.andExpect(jsonPath("$.meals[0].carbohydrates").value(20))
+			.andExpect(jsonPath("$.meals[0].protein").value(30))
+			.andExpect(jsonPath("$.meals[0].fat").value(10))
+			.andExpect(jsonPath("$.meals[0].timeOfDay").value(TimeOfDay.LUNCH.toString()));
+	}
+	
+	@Test
+	@Transactional
+	public void testAddLiftingExerciseById() throws Exception {
+		RegisterRequestDto registerRequest = new RegisterRequestDto("testuser", "testuser@gmail.com", "password");
+		authService.register(registerRequest);
+		dailyLogService.createLog("testuser", java.time.LocalDate.of(2024, 6, 1));
+		
+		LiftingExerciseDto liftingExerciseDto = new LiftingExerciseDto("Bench Press", 3, 10, 100);
+		LiftingExerciseDto savedLiftingExerciseDto = liftingExerciseService.addLiftingExercise(liftingExerciseDto);
+		
+		mvc.perform(post("/api/logs/2024-06-01/lifting/" + savedLiftingExerciseDto.getId())
+				.accept(MediaType.APPLICATION_JSON))
+			.andDo(print())
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.liftingExercises[0].name").value("Bench Press"))
+			.andExpect(jsonPath("$.liftingExercises[0].sets").value(3))
+			.andExpect(jsonPath("$.liftingExercises[0].reps").value(10))
+			.andExpect(jsonPath("$.liftingExercises[0].weight").value(100));
+	}
+	
+	@Test
+	@Transactional
+	public void testAddCardioExerciseById() throws Exception {
+		RegisterRequestDto registerRequest = new RegisterRequestDto("testuser", "testuser@gmail.com", "password");
+		authService.register(registerRequest);
+		dailyLogService.createLog("testuser", java.time.LocalDate.of(2024, 6, 1));
+		
+		CardioExerciseDto cardioExerciseDto = new CardioExerciseDto("Running", 30.0, 200, 5.0);
+		CardioExerciseDto savedCardioExerciseDto = cardioExerciseService.addCardioExercise(cardioExerciseDto);
+		
+		mvc.perform(post("/api/logs/2024-06-01/cardio/" + savedCardioExerciseDto.getId())
+				.accept(MediaType.APPLICATION_JSON))
+			.andDo(print())
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.cardioExercises[0].name").value("Running"))
+			.andExpect(jsonPath("$.cardioExercises[0].durationMinutes").value(30))
+			.andExpect(jsonPath("$.cardioExercises[0].caloriesBurned").value(200))
+			.andExpect(jsonPath("$.cardioExercises[0].pace").value(5.0));
+	}
+	
+	@Test
+	@Transactional
+	public void testDeleteMeal() throws Exception {
+		RegisterRequestDto registerRequest = new RegisterRequestDto("testuser", "testuser@gmail.com", "password");
+		authService.register(registerRequest);
+		dailyLogService.createLog("testuser", java.time.LocalDate.of(2024, 6, 1));
+		
+		MealDto mealDto = new MealDto("Chicken Salad", 400, 20, 30, 10, TimeOfDay.LUNCH);
+		MealDto savedMealDto = mealService.addMeal(mealDto);
+		dailyLogService.addMealToLog("testuser", java.time.LocalDate.of(2024, 6, 1), savedMealDto.getId());
+		
+		mvc.perform(delete("/api/logs/2024-06-01/meals/" + savedMealDto.getId()))
+			.andDo(print())
+			.andExpect(status().isNoContent());
+		
+		mvc.perform(get("/api/logs/2024-06-01"))
+			.andDo(print())
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.meals").isEmpty());
+		
+	}
+	
+	@Test
+	@Transactional
+	public void testDeleteLiftingExercise() throws Exception {
+		RegisterRequestDto registerRequest = new RegisterRequestDto("testuser", "testuser@gmail.com", "password");
+		authService.register(registerRequest);
+		dailyLogService.createLog("testuser", java.time.LocalDate.of(2024, 6, 1));
+		
+		LiftingExerciseDto liftingExerciseDto = new LiftingExerciseDto("Bench Press", 3, 10, 100);
+		LiftingExerciseDto savedLiftingExerciseDto = liftingExerciseService.addLiftingExercise(liftingExerciseDto);
+		dailyLogService.addLiftingExerciseToLog("testuser", java.time.LocalDate.of(2024, 6, 1), savedLiftingExerciseDto.getId());
+		
+		mvc.perform(delete("/api/logs/2024-06-01/lifting/" + savedLiftingExerciseDto.getId()))
+			.andDo(print())
+			.andExpect(status().isNoContent());
+		
+		mvc.perform(get("/api/logs/2024-06-01"))
+			.andDo(print())
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.liftingExercises").isEmpty());
+	}
+	
+	@Test
+	@Transactional
+	public void testDeleteCardioExercise() throws Exception {
+		RegisterRequestDto registerRequest = new RegisterRequestDto("testuser", "testuser@gmail.com", "password");
+		authService.register(registerRequest);
+		dailyLogService.createLog("testuser", java.time.LocalDate.of(2024, 6, 1));
+		
+		CardioExerciseDto cardioExerciseDto = new CardioExerciseDto("Running", 30.0, 200, 5);
+		CardioExerciseDto savedCardioExerciseDto = cardioExerciseService.addCardioExercise(cardioExerciseDto);
+		dailyLogService.addCardioExerciseToLog("testuser", java.time.LocalDate.of(2024, 6, 1), savedCardioExerciseDto.getId());
+		
+		mvc.perform(delete("/api/logs/2024-06-01/cardio/" + savedCardioExerciseDto.getId()))
+			.andDo(print())
+			.andExpect(status().isNoContent());
+		
+		mvc.perform(get("/api/logs/2024-06-01"))
+			.andDo(print())
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.cardioExercises").isEmpty());
+	}
+	
+	@Test
+	@Transactional
+	public void testUpdateWaterOunces() throws Exception {
+		RegisterRequestDto registerRequest = new RegisterRequestDto("testuser", "testuser@gmail.com", "password");
+		authService.register(registerRequest);
+		dailyLogService.createLog("testuser", java.time.LocalDate.of(2024, 6, 1));
+		
+		
+		mvc.perform( patch ("/api/logs/2024-06-01/water/add"))
+		.andDo(print())
+		.andExpect(status().isCreated())
+		.andExpect(jsonPath("$.date").value("2024-06-01"))
+		.andExpect(jsonPath("$.waterOunces").value(16.0));
+		
+		
+	}
+		
+	
+
+}

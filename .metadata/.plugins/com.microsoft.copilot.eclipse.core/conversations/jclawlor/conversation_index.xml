@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?><user username="jclawlor">
+    <conversations>
+        <conversation conversationId="52e25639-092d-4858-af46-585f9160a550" creationDate="2026-07-28T03:25:54.594024Z" lastMessageDate="2026-07-28T03:25:56.008287800Z" title="Hello"/>
+        <conversation conversationId="961b568e-3e8b-4360-ba74-ee75b96d7d27" creationDate="2026-07-28T19:31:08.087457Z" lastMessageDate="2026-07-28T19:31:09.962636500Z" title="Test"/>
+        <conversation conversationId="87b6d622-6323-4f17-96c6-fab9b4e65e1b" creationDate="2026-07-28T19:34:44.850893200Z" lastMessageDate="2026-07-29T01:44:11.782830600Z" title="Troubleshooting Spring Boot Security Issues"/>
+        <conversation conversationId="4832103e-fb40-4156-b315-335dfe0569ff" creationDate="2026-07-29T15:39:24.108872500Z" lastMessageDate="2026-07-30T23:44:45.284560100Z" title="Testing User Authentication in Spring Security"/>
+        <conversation conversationId="5007f4bf-9842-42bb-b1c5-936796b18b52" creationDate="2026-08-01T18:47:46.595066300Z" lastMessageDate="2026-08-01T18:51:20.777429Z" title="What will findByUserUsernameAndDate return if ther..."/>
+        <conversation conversationId="91aa697c-897f-4456-8c26-c24f82a78837" creationDate="2026-08-01T18:52:00.246113Z" lastMessageDate="2026-08-01T18:52:00.937586700Z" title="Test"/>
+        <conversation conversationId="578a2f28-ffba-4809-ad9c-ddab9d30ebfb" creationDate="2026-08-01T18:52:58.172933300Z" lastMessageDate="2026-08-01T18:52:58.321111200Z" title="Hello"/>
+        <conversation conversationId="48b11938-cb2c-435a-b9b2-3c2a8e7136cb" creationDate="2026-08-08T21:24:03.708334100Z" lastMessageDate="2026-08-09T01:09:28.373587900Z" title="Handling Unique Constraint Violations in Tests"/>
+        <conversation conversationId="1e6abcdb-daa7-49bc-b32e-e6d3f3447166" creationDate="2026-08-24T16:04:09.918045800Z" lastMessageDate="2026-08-24T16:28:45.843892200Z" title="Fixing Removal Issues in DailyLogService"/>
+        <conversation conversationId="88551bb8-3685-4305-8509-09df1aa0c4c4" creationDate="2026-08-24T23:00:23.365605400Z" lastMessageDate="2026-08-24T23:00:41.133825300Z" title="When getLogByDate returns the DailyLogDto it will ..."/>
+        <conversation conversationId="930cb3e5-5173-4f8e-9720-9a1dd7596319" creationDate="2026-08-24T23:01:44.351073300Z" lastMessageDate="2026-08-24T23:01:44.508244300Z" title="When getLogByDate returns the DailyLogDto it will ..."/>
+        <conversation conversationId="e020cbc3-eeab-4b6c-9869-fce00812f17e" creationDate="2026-08-25T14:44:17.218781300Z" lastMessageDate="2026-08-25T14:45:21.178752800Z" title="Resolving CORS Issues in Spring Security"/>
+        <conversation conversationId="2ed728f1-50ed-47c4-bd91-fabe8c63cc4d" creationDate="2026-08-28T22:24:04.067506900Z" lastMessageDate="2026-09-02T19:03:45.273056800Z" title="Diagnosing 405 Error in DailyLogController Tests"/>
+        <conversation conversationId="deb71d17-00c3-4b2e-b3cc-99f06b36df03" creationDate="2026-09-11T20:17:12.370638900Z" lastMessageDate="2026-09-17T17:28:24.947713100Z" title="Accessing JSON Properties in DTOs"/>
+    </conversations>
+</user>

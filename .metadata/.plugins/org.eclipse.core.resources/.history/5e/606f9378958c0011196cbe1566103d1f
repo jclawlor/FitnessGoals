@@ -1,0 +1,86 @@
+package dev.jclawlor.FitnessGoals.service.impl;
+
+import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import dev.jclawlor.FitnessGoals.dto.DailyLogDto;
+import dev.jclawlor.FitnessGoals.entity.DailyLog;
+import dev.jclawlor.FitnessGoals.entity.Meal;
+import dev.jclawlor.FitnessGoals.mapper.DailyLogMapper;
+import dev.jclawlor.FitnessGoals.repository.DailyLogRepository;
+import dev.jclawlor.FitnessGoals.service.DailyLogService;
+
+public class DailyLogServiceImpl implements DailyLogService {
+	
+	@Autowired
+	private DailyLogRepository dailyLogRepository;
+	
+	@Autowired
+	private DailyLogMapper dailyLogMapper;
+
+	@Override
+	public List<DailyLogDto> getAllLogsForUser(String username) {
+		final List<DailyLog> dailyLogs = dailyLogRepository.findByUserUsername(username);
+		return dailyLogs.stream()
+				.map(dailyLogMapper::mapToDailyLogDto)
+				.collect(Collectors.toList());
+		
+		
+	}
+
+	@Override
+	public DailyLogDto getLogByDate(String username, LocalDate date) {
+		return dailyLogMapper.mapToDailyLogDto(dailyLogRepository.findByUserUsernameAndDate(username, date));
+	}
+
+	@Override
+	public DailyLogDto createLog(String username, LocalDate date) {
+		DailyLogdto dailyLogDto = new DailyLogDto(username, date, null, null, null);
+	}
+
+	@Override
+	public void deleteLog(String username, LocalDate date) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public DailyLogDto addMealToLog(String username, LocalDate date, Long mealId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void removeMeal(String username, LocalDate date, Long mealId) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public DailyLogDto addLiftingExerciseToLog(String username, LocalDate date, Long liftingExerciseId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void removeLiftingExerciseFromLog(String username, LocalDate date, Long liftingExerciseId) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public DailyLogDto addCardioExerciseToLog(String username, LocalDate date, Long cardioExerciseId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void removeCardioExerciseFromLog(String username, LocalDate date, Long cardioExerciseId) {
+		// TODO Auto-generated method stub
+		
+	}
+
+}

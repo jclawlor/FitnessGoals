@@ -1,0 +1,55 @@
+{
+  "conversationId": "578a2f28-ffba-4809-ad9c-ddab9d30ebfb",
+  "title": "Hello",
+  "requesterUsername": "jclawlor",
+  "responderUsername": "GitHub Copilot",
+  "turns": [
+    {
+      "message": {
+        "text": "Hello"
+      },
+      "currentDocument": {
+        "uri": "/backend/src/main/java/dev/jclawlor/FitnessGoals/service/impl/DailyLogServiceImpl.java"
+      },
+      "references": [],
+      "ignoredSkills": [],
+      "userLanguage": "en",
+      "source": "panel",
+      "model": "Auto",
+      "chatMode": "Ask",
+      "needToolCallConfirmation": true,
+      "turnId": "b5110fbe-2323-465b-b2c9-c32b6c7ac5ae",
+      "role": "user",
+      "timestamp": "2026-08-01T18:52:58.178611400Z"
+    },
+    {
+      "reply": {
+        "annotations": [],
+        "references": [],
+        "hideText": false,
+        "notifications": [],
+        "followups": [],
+        "errorMessages": [
+          {
+            "error": {
+              "message": "No model configuration found",
+              "code": -1
+            }
+          }
+        ],
+        "editAgentRounds": [],
+        "panelMessages": [],
+        "steps": [],
+        "agentMessages": [],
+        "data": {},
+        "modelName": "auto",
+        "billingMultiplier": 0.0
+      },
+      "turnId": "b5110fbe-2323-465b-b2c9-c32b6c7ac5ae",
+      "role": "copilot",
+      "timestamp": "2026-08-01T18:52:58.236737200Z"
+    }
+  ],
+  "creationDate": "2026-08-01T18:52:58.172933300Z",
+  "lastMessageDate": "2026-08-01T18:52:58.321111200Z"
+}

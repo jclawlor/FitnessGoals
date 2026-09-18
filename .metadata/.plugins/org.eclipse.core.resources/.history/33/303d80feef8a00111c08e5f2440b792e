@@ -1,0 +1,81 @@
+package dev.jclawlor.FitnessGoals.service;
+
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+
+import dev.jclawlor.FitnessGoals.dto.AuthResponseDto;
+import dev.jclawlor.FitnessGoals.dto.LoginRequestDto;
+import dev.jclawlor.FitnessGoals.dto.RegisterRequestDto;
+import dev.jclawlor.FitnessGoals.repository.UserRepository;
+import dev.jclawlor.FitnessGoals.security.JwtUtil;
+
+@SpringBootTest
+public class AuthServiceTest {
+	
+	@Autowired
+	private UserRepository userRepository;
+	
+	@Autowired
+	private AuthService authService;
+	
+	@Autowired
+    private JwtUtil jwtUtil;
+	
+	@BeforeEach
+	public void setUp() throws Exception {
+		userRepository.deleteAll();
+	}
+	
+	
+	public void testRegister() throws Exception {
+		final RegisterRequestDto registerDto = new RegisterRequestDto("testuser1", "testemail1", "testpassword1");
+		final RegisterRequestDto registerDto2 = new RegisterRequestDto("testuser2", "testemail1", "testpassword2");
+		
+		AuthResponseDto authResponse = authService.register(registerDto);
+		assertAll("AuthResponse contents",
+				() -> assertEquals("testuser1", authResponse.getUsername()),
+				() -> assertEquals("testemail1", authResponse.getEmail()),
+				() -> assertNotNull(authResponse.getToken()),
+				() -> jwtUtil.isTokenValid(authResponse.getToken()));
+		
+		
+		try {
+			authService.register(registerDto);
+		} catch (RuntimeException e) {
+			assertEquals("Username already taken", e.getMessage());
+		}
+		
+		try {
+			authService.register(registerDto2);
+		} catch (RuntimeException e) {
+			assertEquals("Email already registered", e.getMessage());
+		}
+		
+		
+	}
+	
+	public void testLogin() throws Exception {
+		final RegisterRequestDto registerDto = new RegisterRequestDto("testuser1", "testemail1", "testpassword1");
+		
+		authService.register(registerDto);
+		
+		final LoginRequestDto loginDto = new LoginRequestDto("testuser1", "testpassword1");
+		AuthResponseDto authResponse = authService.login(loginDto);
+		assertAll("AuthResponse contents",
+				() -> assertEquals("testuser1", authResponse.getUsername()),
+				() -> assertEquals("testemail1", authResponse.getEmail()),
+				() -> assertNotNull(authResponse.getToken()),
+				() -> jwtUtil.isTokenValid(authResponse.getToken()));
+		
+		
+		
+	}
+	
+	
+
+}

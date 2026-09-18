@@ -1,0 +1,76 @@
+package dev.jclawlor.FitnessGoals.entity;
+
+import jakarta.persistence.*;
+import lombok.Data;
+
+@Entity
+@Table(name = "cardio_exercises")
+@Data
+public class CardioExercise {
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+
+	private String name;
+	
+    private double durationMinutes;
+    
+    private int caloriesBurned;
+    
+    @Embedded
+    @AttributeOverrides({
+    	@AttributeOverride(name = "minutes", column = @Column(name = "pace_minutes")),
+    	@AttributeOverride(name = "unit", column = @Column(name = "pace_unit"))
+    })
+    private Pace pace;
+    
+    public CardioExercise() {
+				// default constructor
+	}
+    
+    
+    public Long getId() {
+		return id;
+	}
+	
+	public void setId(Long id) {
+		this.id = id;
+	}
+    
+    public String getName() {
+		return name;
+	}
+    
+    public void setName(String name) {
+    	this.name = name;
+    }
+    
+    public double getDurationMinutes() {
+    	return durationMinutes;
+    }
+    
+    public void setDurationMinutes(double durationMinutes) {
+		this.durationMinutes = durationMinutes;
+	}
+    
+    public int getCaloriesBurned() {
+		return caloriesBurned;
+	}
+    
+    public void setCaloriesBurned(int caloriesBurned) {
+		this.caloriesBurned = caloriesBurned;
+	}
+    
+    public double getPace() {
+    	return pace;
+    }
+    
+    public void setPace(double pace) {
+		this.pace = pace;
+	}
+    
+    
+    
+    
+}

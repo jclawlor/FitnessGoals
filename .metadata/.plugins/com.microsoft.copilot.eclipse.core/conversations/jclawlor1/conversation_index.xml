@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?><user username="jclawlor1">
+    <conversations>
+        <conversation conversationId="17685e82-bd95-49e1-87d2-b06a7971eac2" creationDate="2026-03-10T18:32:56.639658400Z" lastMessageDate="2026-03-10T18:49:55.533819Z" title="Debugging Meal API Validation Errors"/>
+        <conversation conversationId="093ea55c-a733-4e99-ab2f-0b233163c767" creationDate="2026-03-10T19:14:27.608886800Z" lastMessageDate="2026-03-10T19:23:28.758131900Z" title="Debugging Meal DTO Validation and Persistence"/>
+        <conversation conversationId="eb1d0741-7aaa-47bf-bbe9-17bc82978b96" creationDate="2026-03-10T23:37:01.994134600Z" lastMessageDate="2026-03-10T23:56:04.368071600Z" title="Troubleshooting Database Connection Issues"/>
+        <conversation conversationId="09755365-318a-4e2b-a41b-41f8df44bed2" creationDate="2026-03-23T18:16:11.127326200Z" lastMessageDate="2026-03-23T18:16:19.994862600Z" title="Using MockMvc Matchers"/>
+        <conversation conversationId="daf808ab-2692-4377-9887-4cf615cf9ad1" creationDate="2026-04-03T18:19:05.765657700Z" lastMessageDate="2026-04-03T18:26:45.145620300Z" title="Issues with MealDto and Lombok"/>
+        <conversation conversationId="99e1198f-9746-4ce5-b399-682e14f5b724" creationDate="2026-04-04T01:06:20.373887600Z" lastMessageDate="2026-04-04T01:58:27.289015200Z" title="Fixing JSON Field Mismatches in DTOs"/>
+        <conversation conversationId="ee1ae6f1-3021-4a50-9942-150ed923b2df" creationDate="2026-04-15T00:00:57.821697700Z" lastMessageDate="2026-04-15T00:01:22.541815300Z" title="Using Lombok for Constructor Injection"/>
+        <conversation conversationId="dd7a547c-045c-4ef8-86b9-5eb49ee34a13" creationDate="2026-04-16T20:56:45.053210700Z" lastMessageDate="2026-04-16T20:57:40.730480200Z" title="Debugging ExerciseService Implementation Issues"/>
+        <conversation conversationId="b6938654-6867-40d1-b111-0fecd50dc25b" creationDate="2026-04-20T16:17:56.647047700Z" lastMessageDate="2026-04-20T16:18:34.927079900Z" title="Spring Boot Bean Not Found Error"/>
+        <conversation conversationId="364a6824-ff15-42ab-8fc6-cf8b7f460453" creationDate="2026-04-20T18:43:50.200886200Z" lastMessageDate="2026-04-20T23:31:32.964218400Z" title="Handling Errors in Spring Boot Tests"/>
+        <conversation conversationId="09e82753-5d07-45fd-9600-eb6eb505ac85" creationDate="2026-06-01T01:41:53.345075700Z" lastMessageDate="2026-06-01T20:08:51.864103800Z" title="Configuring Spring Security Dependencies"/>
+        <conversation conversationId="17df78ca-ca2a-45b9-b3e0-eba5e72ea024" creationDate="2026-07-24T21:48:07.750380900Z" lastMessageDate="2026-07-24T21:48:09.883348700Z" title="Why is it saying CardioExerciseDto is undefined?"/>
+        <conversation conversationId="adbde115-3775-4841-938e-0b01d060bd5d" creationDate="2026-07-28T03:03:06.907661600Z" lastMessageDate="2026-07-28T03:03:08.501522Z" title="How to I run this backend application so I can tes..."/>
+    </conversations>
+</user>

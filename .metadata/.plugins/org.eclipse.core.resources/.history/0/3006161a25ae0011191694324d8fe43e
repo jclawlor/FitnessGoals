@@ -1,0 +1,20 @@
+package dev.jclawlor.FitnessGoals.dto;
+
+import jakarta.validation.constraints.Positive;
+
+public class HydrationDto {
+	
+	private Long id;
+	
+	@Positive
+	private double waterIntakeOunces;
+	
+	public HydrationDto(double waterIntakeOunces) {
+		this.waterIntakeOunces = waterIntakeOunces;
+	}
+	
+	public HydrationDto() {
+		// default constructor
+	}
+
+}

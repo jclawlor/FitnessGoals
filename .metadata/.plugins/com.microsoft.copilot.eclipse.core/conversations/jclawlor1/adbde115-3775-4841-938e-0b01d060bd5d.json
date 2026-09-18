@@ -1,0 +1,55 @@
+{
+  "conversationId": "adbde115-3775-4841-938e-0b01d060bd5d",
+  "title": "How to I run this backend application so I can tes...",
+  "requesterUsername": "jclawlor1",
+  "responderUsername": "GitHub Copilot",
+  "turns": [
+    {
+      "message": {
+        "text": "How to I run this backend application so I can test the API"
+      },
+      "currentDocument": {
+        "uri": "/backend/src/main/java/dev/jclawlor/FitnessGoals/repository/DailyLogRepository.java"
+      },
+      "references": [],
+      "ignoredSkills": [],
+      "userLanguage": "en",
+      "source": "panel",
+      "model": "Auto",
+      "chatMode": "Ask",
+      "needToolCallConfirmation": true,
+      "turnId": "9af4a686-b621-43a6-a28d-fc74c59f59ab",
+      "role": "user",
+      "timestamp": "2026-07-28T03:03:06.938177600Z"
+    },
+    {
+      "reply": {
+        "annotations": [],
+        "references": [],
+        "hideText": false,
+        "notifications": [],
+        "followups": [],
+        "errorMessages": [
+          {
+            "error": {
+              "message": "Oops, the model is not supported. Please try again.",
+              "code": 400
+            }
+          }
+        ],
+        "editAgentRounds": [],
+        "panelMessages": [],
+        "steps": [],
+        "agentMessages": [],
+        "data": {},
+        "modelName": "GPT-5 mini",
+        "billingMultiplier": 1.0
+      },
+      "turnId": "19cfbb4d-94dd-4fd5-999e-0594f0006dee",
+      "role": "copilot",
+      "timestamp": "2026-07-28T03:03:07.303146100Z"
+    }
+  ],
+  "creationDate": "2026-07-28T03:03:06.907661600Z",
+  "lastMessageDate": "2026-07-28T03:03:08.501522Z"
+}

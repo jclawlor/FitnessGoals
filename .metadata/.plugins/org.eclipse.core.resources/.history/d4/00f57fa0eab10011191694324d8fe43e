@@ -1,0 +1,75 @@
+package dev.jclawlor.FitnessGoals.dto;
+
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Positive;
+
+
+public class CardioExerciseDto {
+	
+	
+	private Long id;
+	
+	@NotEmpty
+    private String name;
+	@Positive
+    private double durationMinutes;
+	@Positive
+    private int caloriesBurned;
+	@Positive
+    private PaceDto pace;
+    
+    
+    public CardioExerciseDto(String name, double durationMinutes, int caloriesBurned, PaceDto pace) {
+    	this.name = name;
+    	this.durationMinutes = durationMinutes;
+    	this.caloriesBurned = caloriesBurned;
+    	this.pace = pace;
+    }
+    
+    public CardioExerciseDto() {
+		
+	}
+    
+
+	public Long getId() {
+    	return id;
+    }
+    
+    public void setId(Long id) {
+		this.id = id;
+	}
+    
+    
+    
+    public String getName() {
+		return name;
+	}
+    
+    public void setName(String name) {
+    	this.name = name;
+    }
+    
+    public double getDurationMinutes() {
+    	return durationMinutes;
+    }
+    
+    public void setDurationMinutes(double durationMinutes) {
+		this.durationMinutes = durationMinutes;
+	}
+    
+    public int getCaloriesBurned() {
+		return caloriesBurned;
+	}
+    
+    public void setCaloriesBurned(int caloriesBurned) {
+		this.caloriesBurned = caloriesBurned;
+	}
+    
+    public Pace getPace() {
+    	return pace;
+    }
+    
+    public void setPace(PaceDto pace) {
+		this.pace = pace;
+	}
+}

@@ -1,0 +1,55 @@
+{
+  "conversationId": "961b568e-3e8b-4360-ba74-ee75b96d7d27",
+  "title": "Test",
+  "requesterUsername": "jclawlor",
+  "responderUsername": "GitHub Copilot",
+  "turns": [
+    {
+      "message": {
+        "text": "Test"
+      },
+      "currentDocument": {
+        "uri": "/backend/src/main/java/dev/jclawlor/FitnessGoals/repository/DailyLogRepository.java"
+      },
+      "references": [],
+      "ignoredSkills": [],
+      "userLanguage": "en",
+      "source": "panel",
+      "model": "Auto",
+      "chatMode": "Ask",
+      "needToolCallConfirmation": true,
+      "turnId": "51f63059-a57c-4880-9c0f-29f253ea2af5",
+      "role": "user",
+      "timestamp": "2026-07-28T19:31:08.178410500Z"
+    },
+    {
+      "reply": {
+        "annotations": [],
+        "references": [],
+        "hideText": false,
+        "notifications": [],
+        "followups": [],
+        "errorMessages": [
+          {
+            "error": {
+              "message": "Oops, the model is not supported. Please try again.",
+              "code": 400
+            }
+          }
+        ],
+        "editAgentRounds": [],
+        "panelMessages": [],
+        "steps": [],
+        "agentMessages": [],
+        "data": {},
+        "modelName": "Claude Haiku 4.5",
+        "billingMultiplier": 1.0
+      },
+      "turnId": "5c382946-bf7a-474b-b3de-1231d9d81be6",
+      "role": "copilot",
+      "timestamp": "2026-07-28T19:31:08.411246400Z"
+    }
+  ],
+  "creationDate": "2026-07-28T19:31:08.087457Z",
+  "lastMessageDate": "2026-07-28T19:31:09.962636500Z"
+}
