@@ -2,6 +2,9 @@
 target/
 *.class
 
+# Eclipse
+.metadata/
+
 # Node
 node_modules/
 dist/
