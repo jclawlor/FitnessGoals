@@ -1,1 +1,2 @@
-FitnessGoals is a web application where you can log and manage your daily activity to help you along your health journey.
+FitnessGoals is a full-stack fitness tracking web application built with Spring Boot and React. 
+Track your daily meals, lifting exercises, cardio sessions, and water intake.
